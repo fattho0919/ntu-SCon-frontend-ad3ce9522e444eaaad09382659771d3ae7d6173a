@@ -4724,11 +4724,9 @@
   "version" "1.0.1"
 
 "json5@^2.1.2":
-  "integrity" "sha512-f+8cldu7X/y7RAJurMEJmdoKXGB/X550w2Nr3tTbezL6RwEE/iMcm+tZnXeoZtKuOq6ft8+CqzEkrIgx1fPoQA=="
-  "resolved" "https://registry.npmjs.org/json5/-/json5-2.2.0.tgz"
-  "version" "2.2.0"
-  dependencies:
-    "minimist" "^1.2.5"
+  "integrity" "sha512-46Tk9JiOL2z7ytNQWFLpj99RZkVgeHf87yGQKsIkaPz1qSH9UczKH1rO7K3wgRselo0tYMUNfecYpm/p1vC7tQ=="
+  "resolved" "https://registry.npmjs.org/json5/-/json5-2.2.2.tgz"
+  "version" "2.2.2"
 
 "jsonfile@^2.1.0":
   "integrity" "sha1-NzaitCi4e72gzIO1P6PWM6NcKug= sha512-PKllAqbgLgxHaj8TElYymKCAgrASebJrWpTnEkOaTowt23VKXXN0sUeriJ+eh7y6ufb/CC5ap11pz71/cM0hUw=="

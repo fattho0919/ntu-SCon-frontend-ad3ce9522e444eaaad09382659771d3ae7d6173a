@@ -333,20 +333,20 @@ const IssueScreen = ({ navigation, route }) => {
   }
 
   const issueLocationClickHandler = async () => {
-    var options = ['取消','新增地點']
-    for (i of await SqliteManager.getIssueLocationsByProjectId(projectId)){
-      options.splice(1, 0, i.location)
-    }
+    var options = (
+      await SqliteManager.getIssueLocationsByProjectId(projectId)
+    ).map(item => {return {location:item.location, id:item.id}})
+    options.push({location:'新增地點'}, {location:'取消'})
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: options,
-        cancelButtonIndex :0,
+        options: options.map(item => item.location),
+        cancelButtonIndex :options.length-1,
         userInterfaceStyle:'light',
       },
       async (buttonIndex) => {
-        if (buttonIndex == 0){
+        if (buttonIndex == options.length-1){
           setIssueLocationText(issueLocationText)
-        }else if(buttonIndex == options.length-1){
+        }else if(buttonIndex == options.length-2){
           Alert.prompt(
             '請輸入缺失位置',
             '(如: 2F西側)',
@@ -359,22 +359,24 @@ const IssueScreen = ({ navigation, route }) => {
             },
           )
         }else{
-          console.log(options)
-          Alert.alert(`目前選擇: ${options[buttonIndex]}`,"刪除 或 點選",
+          Alert.alert(`目前選擇: ${options[buttonIndex].location}`,"刪除／點選",
             [
               {
                 text: "刪除地點",
+                style:'destructive',
                 onPress: async () => {
-                  await SqliteManager.deleteIssueLocation(options[buttonIndex]);
+                  await SqliteManager.deleteIssueLocation(options[buttonIndex].id);
+                  setIssueLocationText('')
                 }
               },
               {
-                text: "確定點選",
+                text: "確定",
                 onPress: async () => {
-                  setIssueLocationText(options[buttonIndex]);
+                  setIssueLocationText(options[buttonIndex].location);
                 }
               }
-            ]
+            ],
+            'light',
           )
         }
       }
