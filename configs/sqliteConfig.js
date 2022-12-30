@@ -79,6 +79,14 @@ const SYSTEM_CONFIG = {
     min_y: 'INTEGER NOT NULL',
     created_at: 'INTEGER NOT NULL',
   },
+  issue_location_table_name: 'issue_location', // 缺失地點
+  issue_location_table_shcema: {
+    id: 'TEXT PRIMARY KEY NOT NULL',
+    location: 'TEXT NOT NULL',
+    project_id: 'TEXT NOT NULL',
+    created_at: 'INTEGER NOT NULL',
+    updated_at: 'INTEGER NOT NULL',
+  },
   work_item_table_name: 'workitem', // 工項
   work_item_table_shcema: {
     id: 'TEXT PRIMARY KEY NOT NULL',

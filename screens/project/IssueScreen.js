@@ -48,6 +48,7 @@ const IssueScreen = ({ navigation, route }) => {
   const projectId = route.params.projectId;
   const [action, setAction] = useState(route.params.action);
   const [issueId, setIssueId] = useState(item.id);
+  const [selectedIssueLocationId, setSelectedIssueLocationId] = useState(null);
   const [violationType, setViolationType] = useState(route.params.violation_type?route.params.violation_type:item.violation_type);
   const [issueType, setIssueType] = useState(item.type);
   const [issueTypeRemark, setIssueTypeRemark] = useState(item.type_remark);
@@ -331,6 +332,55 @@ const IssueScreen = ({ navigation, route }) => {
     )
   }
 
+  const issueLocationClickHandler = async () => {
+    var options = ['取消','新增地點']
+    for (i of await SqliteManager.getIssueLocationsByProjectId(projectId)){
+      options.splice(1, 0, i.location)
+    }
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: options,
+        cancelButtonIndex :0,
+        userInterfaceStyle:'light',
+      },
+      async (buttonIndex) => {
+        if (buttonIndex == 0){
+          setIssueLocationText(issueLocationText)
+        }else if(buttonIndex == options.length-1){
+          Alert.prompt(
+            '請輸入缺失位置',
+            '(如: 2F西側)',
+            async (location) => {
+              setIssueLocationText(location),
+              await SqliteManager.createIssueLocation({
+                project_id: projectId,
+                location: location,
+              });
+            },
+          )
+        }else{
+          console.log(options)
+          Alert.alert(`目前選擇: ${options[buttonIndex]}`,"刪除 或 點選",
+            [
+              {
+                text: "刪除地點",
+                onPress: async () => {
+                  await SqliteManager.deleteIssueLocation(options[buttonIndex]);
+                }
+              },
+              {
+                text: "確定點選",
+                onPress: async () => {
+                  setIssueLocationText(options[buttonIndex]);
+                }
+              }
+            ]
+          )
+        }
+      }
+    )
+  }
+
   const issueCreateHandler = React.useCallback(async () => {
 
     const transformedIssue = {
@@ -589,16 +639,20 @@ const IssueScreen = ({ navigation, route }) => {
             </View>
           </View>
           <View style={styles.group}>
+            <TouchableOpacity onPress={issueLocationClickHandler}>
             <View style={styles.item}>
               <Text style={styles.title}>缺失地點</Text>
               <View style={{ flexDirection: 'row' }}>
-                <TextInput
-                  style={styles.textInput}
-                  onChangeText={setIssueLocationText}
-                  defaultValue={issueLocationText}
+                <Text style={styles.textInput}>
+                  {!!issueLocationText? issueLocationText:undefined}
+                </Text>
+                <Ionicons
+                  style={styles.description}
+                  name={'ios-chevron-forward'}
                 />
               </View>
             </View>
+            </TouchableOpacity>
             <Separator />
             <TouchableOpacity onPress={responsibleCorporationclickHandler}>
             <View style={styles.item}>

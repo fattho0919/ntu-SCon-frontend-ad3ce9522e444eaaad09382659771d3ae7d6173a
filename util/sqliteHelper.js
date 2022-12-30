@@ -61,7 +61,7 @@ export const transformProject = project => {
 export const transformProjects = projects =>
   projects.map(project => transformProject(project));
 
-  export const transformWorkItem = workitem => {
+export const transformWorkItem = workitem => {
     return {
       id: workitem.id,
       name: workitem.name,
@@ -73,7 +73,7 @@ export const transformProjects = projects =>
     };
   };
   
-  export const transformWorkItems = workitems =>
+export const transformWorkItems = workitems =>
     workitems.map(workitem => transformWorkItem(workitem));
 
 export const transformIssue = issue => {
